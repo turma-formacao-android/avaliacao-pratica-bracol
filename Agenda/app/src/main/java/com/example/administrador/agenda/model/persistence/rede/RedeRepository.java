@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.example.administrador.agenda.model.entidade.Agenda;
 import com.example.administrador.agenda.model.entidade.Rede;
 import com.example.administrador.agenda.model.persistence.DatabaseHelper;
 
@@ -47,12 +48,13 @@ public class RedeRepository {
         databaseHelper.close();
     }
 
-    public static List<Rede> getAll() {
+    public static List<Rede> getAll(Long id) {
         DatabaseHelper databaseHelper = DatabaseHelper.getInstance();
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
 
-        /* ResultSet do Android */
-        Cursor cursor = db.query(RedeContract.TABLE, RedeContract.COLUMNS, null, null, null, null, RedeContract.ID);
+        String where = RedeContract.AGENDA + " = ? ";
+        String[] paramns = {String.valueOf(id)};
+        Cursor cursor = db.query(RedeContract.TABLE, RedeContract.COLUMNS, where, paramns, null, null, RedeContract.ID);
 
         List<Rede> values = RedeContract.getListRede(cursor);
 
@@ -61,22 +63,73 @@ public class RedeRepository {
 
         return values;
     }
-    /*
-    public static Long getIdByWebId(Long webId){
+
+    public static List<Rede> getNull() {
         DatabaseHelper databaseHelper = DatabaseHelper.getInstance();
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
 
-        String where = TaskContract.WEB_ID + " = ?";
-        String[] params = {String.valueOf(webId)};
-        String[] colums = {TaskContract.ID};
-        Cursor cursor = db.query(TaskContract.TABLE, TaskContract.COLUMNS, where, params, null, null, null);
+        String where = RedeContract.AGENDA + " = ? ";
+        String[] paramns = {"null"};
+        Cursor cursor = db.query(RedeContract.TABLE, RedeContract.COLUMNS, where, paramns, null, null, RedeContract.ID);
 
-        if (cursor.getCount() > 0){
-            Task task = TaskContract.getTask(cursor);
-            return task.getId();
-        }
-        return (long) 0;
+        List<Rede> values = RedeContract.getListRede(cursor);
 
+        db.close();
+        databaseHelper.close();
+
+        return values;
     }
-    */
+
+
+    public static void updateNull(Agenda agenda){
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance();
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(RedeContract.AGENDA, agenda.get_id());
+
+        String where = RedeContract.AGENDA + " = ? ";
+        String[] params = {"null"};
+        db.update(RedeContract.TABLE, values, where, params);
+    }
+
+    public static Long getId(String rede) {
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance();
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+
+        String where = RedeContract.REDE + " = ? ";
+        String[] paramns = {rede};
+        Cursor cursor = db.query(RedeContract.TABLE, RedeContract.COLUMNS, where, paramns, null, null, RedeContract.ID);
+
+        Rede rede1 = RedeContract.getRede(cursor);
+
+        db.close();
+        databaseHelper.close();
+
+        return rede1.getId();
+    }
+
+    public static void deleteByIdAgenda(Long idAgenda){
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance();
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+        String where = RedeContract.AGENDA + " = ? ";
+        String[] params = {String.valueOf(idAgenda)};
+        db.delete(RedeContract.TABLE, where, params);
+
+        db.close();
+        databaseHelper.close();
+    }
+
+    public static void deleteNull(){
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance();
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+        String where = RedeContract.AGENDA + " = ? ";
+        String[] params = {"null"};
+        db.delete(RedeContract.TABLE, where, params);
+
+        db.close();
+        databaseHelper.close();
+    }
 }

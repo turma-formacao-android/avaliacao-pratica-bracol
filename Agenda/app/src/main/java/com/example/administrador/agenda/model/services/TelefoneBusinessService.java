@@ -14,12 +14,16 @@ public class TelefoneBusinessService {
         super();
     }
 
-    public static List<Telefone> findAll() {
-        List<Telefone> all = TelefoneRepository.getAll();
+    public static List<Telefone> findAll(Long id) {
+        List<Telefone> all = TelefoneRepository.getAll(id);
         for (Telefone telefone : all) {
             telefone.setAgenda(AgendaRepository.getById(telefone.getAgenda().get_id()));
         }
         return all;
+    }
+
+    public static List<Telefone> findByNull(){
+        return TelefoneRepository.getNull();
     }
 
     public static void save(Telefone telefone) {
@@ -28,7 +32,7 @@ public class TelefoneBusinessService {
 
 
     public static void delete(Telefone selectTelefone) {
-        AgendaRepository.delete(selectTelefone.getId());
+        TelefoneRepository.delete(selectTelefone.getId());
     }
 
 }

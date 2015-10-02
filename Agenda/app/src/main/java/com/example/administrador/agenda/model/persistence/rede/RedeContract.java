@@ -4,7 +4,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 
 import com.example.administrador.agenda.model.entidade.Agenda;
-import com.example.administrador.agenda.model.entidade.Email;
 import com.example.administrador.agenda.model.entidade.Rede;
 
 import java.util.ArrayList;
@@ -42,7 +41,11 @@ public class RedeContract {
         ContentValues values = new ContentValues();
         values.put(RedeContract.ID, rede.getId());
         values.put(RedeContract.REDE, rede.getRede());
-        values.put(RedeContract.AGENDA, rede.getAgenda().get_id());
+        if(rede.getAgenda().get_id() == null){
+            values.put(RedeContract.AGENDA, "null");
+        }else {
+            values.put(RedeContract.AGENDA, rede.getAgenda().get_id());
+        }
 
 
         return values;

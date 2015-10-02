@@ -3,6 +3,10 @@ package com.example.administrador.agenda.model.entidade;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,15 +15,19 @@ import java.util.List;
  */
 public class Agenda implements Parcelable {
 
-    private Long _id;
-    private String name;
-    private String cep;
-    private String rua;
-    private String bairro;
-    private String cidade;
-    private List<Telefone> listaTelefone;
-    private List<Email> listaEmail;
-    private List<Rede> listaRede;
+    @JsonIgnore
+    private String tipoDeLogradouro;
+
+    @JsonIgnore
+    private String estado;
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
 
     public Long get_id() {
         return _id;
@@ -69,28 +77,27 @@ public class Agenda implements Parcelable {
         this.cidade = cidade;
     }
 
-    public List<Telefone> getListaTelefone() {
-        return listaTelefone;
+    private Long _id;
+    private String name;
+
+    @JsonProperty("cep")
+    private String cep;
+
+    @JsonProperty("logradouro")
+    private String rua;
+
+    @JsonProperty("bairro")
+    private String bairro;
+
+    @JsonProperty("cidade")
+    private String cidade;
+
+    public String getTipoDeLogradouro() {
+        return tipoDeLogradouro;
     }
 
-    public void setListaTelefone(List<Telefone> listaTelefone) {
-        this.listaTelefone = listaTelefone;
-    }
-
-    public List<Email> getListaEmail() {
-        return listaEmail;
-    }
-
-    public void setListaEmail(List<Email> listaEmail) {
-        this.listaEmail = listaEmail;
-    }
-
-    public List<Rede> getListaRede() {
-        return listaRede;
-    }
-
-    public void setListaRede(List<Rede> listaRede) {
-        this.listaRede = listaRede;
+    public void setTipoDeLogradouro(String tipoDeLogradouro) {
+        this.tipoDeLogradouro = tipoDeLogradouro;
     }
 
     @Override
@@ -100,46 +107,42 @@ public class Agenda implements Parcelable {
 
         Agenda agenda = (Agenda) o;
 
+        if (tipoDeLogradouro != null ? !tipoDeLogradouro.equals(agenda.tipoDeLogradouro) : agenda.tipoDeLogradouro != null)
+            return false;
+        if (estado != null ? !estado.equals(agenda.estado) : agenda.estado != null) return false;
         if (_id != null ? !_id.equals(agenda._id) : agenda._id != null) return false;
         if (name != null ? !name.equals(agenda.name) : agenda.name != null) return false;
         if (cep != null ? !cep.equals(agenda.cep) : agenda.cep != null) return false;
         if (rua != null ? !rua.equals(agenda.rua) : agenda.rua != null) return false;
         if (bairro != null ? !bairro.equals(agenda.bairro) : agenda.bairro != null) return false;
-        if (cidade != null ? !cidade.equals(agenda.cidade) : agenda.cidade != null) return false;
-        if (listaTelefone != null ? !listaTelefone.equals(agenda.listaTelefone) : agenda.listaTelefone != null)
-            return false;
-        if (listaEmail != null ? !listaEmail.equals(agenda.listaEmail) : agenda.listaEmail != null)
-            return false;
-        return !(listaRede != null ? !listaRede.equals(agenda.listaRede) : agenda.listaRede != null);
+        return !(cidade != null ? !cidade.equals(agenda.cidade) : agenda.cidade != null);
 
     }
 
     @Override
     public int hashCode() {
-        int result = _id != null ? _id.hashCode() : 0;
+        int result = tipoDeLogradouro != null ? tipoDeLogradouro.hashCode() : 0;
+        result = 31 * result + (estado != null ? estado.hashCode() : 0);
+        result = 31 * result + (_id != null ? _id.hashCode() : 0);
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (cep != null ? cep.hashCode() : 0);
         result = 31 * result + (rua != null ? rua.hashCode() : 0);
         result = 31 * result + (bairro != null ? bairro.hashCode() : 0);
         result = 31 * result + (cidade != null ? cidade.hashCode() : 0);
-        result = 31 * result + (listaTelefone != null ? listaTelefone.hashCode() : 0);
-        result = 31 * result + (listaEmail != null ? listaEmail.hashCode() : 0);
-        result = 31 * result + (listaRede != null ? listaRede.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "Agenda{" +
-                "_id=" + _id +
+                "tipoDeLogradouro='" + tipoDeLogradouro + '\'' +
+                ", estado='" + estado + '\'' +
+                ", _id=" + _id +
                 ", name='" + name + '\'' +
                 ", cep='" + cep + '\'' +
                 ", rua='" + rua + '\'' +
                 ", bairro='" + bairro + '\'' +
                 ", cidade='" + cidade + '\'' +
-                ", listaTelefone=" + listaTelefone +
-                ", listaEmail=" + listaEmail +
-                ", listaRede=" + listaRede +
                 '}';
     }
 
@@ -151,36 +154,31 @@ public class Agenda implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.tipoDeLogradouro);
+        dest.writeString(this.estado);
         dest.writeValue(this._id);
         dest.writeString(this.name);
         dest.writeString(this.cep);
         dest.writeString(this.rua);
         dest.writeString(this.bairro);
         dest.writeString(this.cidade);
-        dest.writeList(this.listaTelefone);
-        dest.writeList(this.listaEmail);
-        dest.writeList(this.listaRede);
     }
 
     public Agenda() {
     }
 
     protected Agenda(Parcel in) {
+        this.tipoDeLogradouro = in.readString();
+        this.estado = in.readString();
         this._id = (Long) in.readValue(Long.class.getClassLoader());
         this.name = in.readString();
         this.cep = in.readString();
         this.rua = in.readString();
         this.bairro = in.readString();
         this.cidade = in.readString();
-        this.listaTelefone = new ArrayList<Telefone>();
-        in.readList(this.listaTelefone, List.class.getClassLoader());
-        this.listaEmail = new ArrayList<Email>();
-        in.readList(this.listaEmail, List.class.getClassLoader());
-        this.listaRede = new ArrayList<Rede>();
-        in.readList(this.listaRede, List.class.getClassLoader());
     }
 
-    public static final Parcelable.Creator<Agenda> CREATOR = new Parcelable.Creator<Agenda>() {
+    public static final Creator<Agenda> CREATOR = new Creator<Agenda>() {
         public Agenda createFromParcel(Parcel source) {
             return new Agenda(source);
         }

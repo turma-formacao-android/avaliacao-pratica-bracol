@@ -24,7 +24,8 @@ public class AgendaRepository {
 
         ContentValues values = AgendaContract.getContentValues(agenda);
         if (agenda.get_id() == null) {
-            db.insert(AgendaContract.TABLE, null, values);
+            long id = db.insert(AgendaContract.TABLE, null, values);
+            agenda.set_id(id);
         } else {
             String where = AgendaContract.ID + " = ? ";
             String[] params = {agenda.get_id().toString()};
@@ -70,11 +71,28 @@ public class AgendaRepository {
         String[] params = {String.valueOf(id)};
 
         Cursor cursor = db.query(AgendaContract.TABLE, AgendaContract.COLUMNS, where, params, null, null, null, null);
-        Agenda label = AgendaContract.getAgenda(cursor);
+        Agenda agenda = AgendaContract.getAgenda(cursor);
 
         db.close();
         databaseHelper.close();
 
-        return label;
+        return agenda;
     }
+
+
+    public static List<Agenda> getAgendaByNome(String nome){
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance();
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+
+        String where = AgendaContract.NAME + " LIKE '%" + nome + "%' ";
+        String[] params = {nome};
+        Cursor cursor = db.query(AgendaContract.TABLE, AgendaContract.COLUMNS, where, null, null, null, null);
+
+
+        List<Agenda> values = AgendaContract.getListAgenda(cursor);
+
+        return values;
+    }
+
+
 }

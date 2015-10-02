@@ -49,12 +49,29 @@ public class TelefoneRepository {
         databaseHelper.close();
     }
 
-    public static List<Telefone> getAll() {
+    public static List<Telefone> getAll(Long id) {
         DatabaseHelper databaseHelper = DatabaseHelper.getInstance();
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
 
-        /* ResultSet do Android */
-        Cursor cursor = db.query(TelefoneContract.TABLE, TelefoneContract.COLUMNS, null, null, null, null, TelefoneContract.ID);
+        String where = TelefoneContract.AGENDA + " = ? ";
+        String[] paramns = {String.valueOf(id)};
+        Cursor cursor = db.query(TelefoneContract.TABLE, TelefoneContract.COLUMNS, where, paramns, null, null, TelefoneContract.ID);
+
+        List<Telefone> values = TelefoneContract.getListTelefone(cursor);
+
+        db.close();
+        databaseHelper.close();
+
+        return values;
+    }
+
+    public static List<Telefone> getNull() {
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance();
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+
+        String where = TelefoneContract.AGENDA + " = ? ";
+        String[] paramns = {"null"};
+        Cursor cursor = db.query(TelefoneContract.TABLE, TelefoneContract.COLUMNS, where, paramns, null, null, TelefoneContract.ID);
 
         List<Telefone> values = TelefoneContract.getListTelefone(cursor);
 
@@ -65,18 +82,62 @@ public class TelefoneRepository {
     }
 
 
-    public static String getByAgendaId(Long agendaID){
+    public static void updateNull(Agenda agenda){
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance();
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(TelefoneContract.AGENDA, agenda.get_id());
+
+        String where = TelefoneContract.AGENDA + " = ? ";
+        String[] params = {"null"};
+        db.update(TelefoneContract.TABLE, values, where, params);
+    }
+
+    public static Long getId(String telefone) {
         DatabaseHelper databaseHelper = DatabaseHelper.getInstance();
         SQLiteDatabase db = databaseHelper.getReadableDatabase();
 
-        String where = TelefoneContract.AGENDA + " = ?";
-        String[] params = {String.valueOf(agendaID)};
-        String[] colums = {TelefoneContract.TELEFONE};
-        Cursor cursor = db.query(TelefoneContract.TABLE, colums, where, params, null, null, null);
+        String where = TelefoneContract.TELEFONE + " = ? ";
+        String[] paramns = {telefone};
+        Cursor cursor = db.query(TelefoneContract.TABLE, TelefoneContract.COLUMNS, where, paramns, null, null, TelefoneContract.ID);
 
+        Telefone telefone1 = TelefoneContract.getTelefone(cursor);
 
-        Telefone telefone = TelefoneContract.getTelefone(cursor);
-        return telefone.getName();
+        db.close();
+        databaseHelper.close();
+
+        return telefone1.getId();
     }
+
+    public static void deleteByIdAgenda(Long idAgenda){
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance();
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+        String where = TelefoneContract.AGENDA + " = ? ";
+        String[] params = {String.valueOf(idAgenda)};
+        db.delete(TelefoneContract.TABLE, where, params);
+
+        db.close();
+        databaseHelper.close();
+    }
+
+    public static void deleteNull(){
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance();
+        SQLiteDatabase db = databaseHelper.getWritableDatabase();
+
+        String where = TelefoneContract.AGENDA + " = ? ";
+        String[] params = {"null"};
+        db.delete(TelefoneContract.TABLE, where, params);
+
+        db.close();
+        databaseHelper.close();
+    }
+
+
+
+
+
+
 
 }

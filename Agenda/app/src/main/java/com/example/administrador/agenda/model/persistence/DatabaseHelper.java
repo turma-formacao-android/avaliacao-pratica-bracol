@@ -4,7 +4,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.administrador.agenda.model.entidade.Email;
 import com.example.administrador.agenda.model.persistence.agenda.AgendaContract;
+import com.example.administrador.agenda.model.persistence.email.EmailContract;
+import com.example.administrador.agenda.model.persistence.rede.RedeContract;
+import com.example.administrador.agenda.model.persistence.telefone.TelefoneContract;
 import com.example.administrador.agenda.util.ApplicationUtil;
 
 /**
@@ -26,6 +30,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(AgendaContract.getCreateTableScript());
+        db.execSQL(TelefoneContract.getCreateTableScript());
+        db.execSQL(RedeContract.getCreateTableScript());
+        db.execSQL(EmailContract.getCreateTableScript());
     }
 
     @Override

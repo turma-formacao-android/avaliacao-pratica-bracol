@@ -42,7 +42,11 @@ public class EmailContract {
         ContentValues values = new ContentValues();
         values.put(EmailContract.ID, email.getId());
         values.put(EmailContract.EMAIL, email.getEmail());
-        values.put(EmailContract.AGENDA, email.getAgenda().get_id());
+        if(email.getAgenda().get_id() == null){
+            values.put(EmailContract.AGENDA, "null");
+        }else {
+            values.put(EmailContract.AGENDA, email.getAgenda().get_id());
+        }
 
 
         return values;

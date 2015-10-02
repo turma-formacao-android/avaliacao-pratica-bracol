@@ -1,9 +1,9 @@
 package com.example.administrador.agenda.model.services;
 
-import com.example.administrador.agenda.model.entidade.Email;
+import com.example.administrador.agenda.model.entidade.Rede;
 import com.example.administrador.agenda.model.entidade.Rede;
 import com.example.administrador.agenda.model.persistence.agenda.AgendaRepository;
-import com.example.administrador.agenda.model.persistence.email.EmailRepository;
+import com.example.administrador.agenda.model.persistence.rede.RedeRepository;
 import com.example.administrador.agenda.model.persistence.rede.RedeRepository;
 
 import java.util.List;
@@ -16,12 +16,16 @@ public class RedeBusinessService {
         super();
     }
 
-    public static List<Rede> findAll() {
-        List<Rede> all = RedeRepository.getAll();
+    public static List<Rede> findAll(Long id) {
+        List<Rede> all = RedeRepository.getAll(id);
         for (Rede rede : all) {
             rede.setAgenda(AgendaRepository.getById(rede.getAgenda().get_id()));
         }
         return all;
+    }
+
+    public static List<Rede> findByNull(){
+        return RedeRepository.getNull();
     }
 
     public static void save(Rede rede) {
@@ -30,6 +34,6 @@ public class RedeBusinessService {
 
 
     public static void delete(Rede selectRede) {
-        AgendaRepository.delete(selectRede.getId());
+        RedeRepository.delete(selectRede.getId());
     }
 }
