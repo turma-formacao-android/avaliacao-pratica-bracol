@@ -1,7 +1,9 @@
 package com.example.administrador.agenda.model.services;
 
 import com.example.administrador.agenda.model.entidade.Agenda;
+import com.example.administrador.agenda.model.entidade.Telefone;
 import com.example.administrador.agenda.model.persistence.agenda.AgendaRepository;
+import com.example.administrador.agenda.model.persistence.telefone.TelefoneRepository;
 
 import java.util.List;
 
@@ -19,8 +21,10 @@ public class AgendaBusinessService {
         return all;
     }
 
-    public static void save(Agenda task) {
-        AgendaRepository.save(task);
+    public static void save(Agenda agenda) {
+        AgendaRepository.save(agenda);
+        Agenda agenda2 = AgendaRepository.getLastAgenda(agenda);
+        TelefoneRepository.updateNull(agenda2);
     }
 
 

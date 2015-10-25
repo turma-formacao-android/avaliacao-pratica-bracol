@@ -77,4 +77,34 @@ public class AgendaRepository {
 
         return label;
     }
+
+    public static Agenda getLastAgenda(Agenda agenda){
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance();
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+
+        String where = AgendaContract.NAME + " = ? AND " + AgendaContract.RUA + " = ?";
+        String[] params = {agenda.getName(), agenda.getRua()};
+        Cursor cursor = db.query(AgendaContract.TABLE, AgendaContract.COLUMNS, where, params, null, null, null);
+
+
+        Agenda agenda1 = AgendaContract.getAgenda(cursor);
+
+        return agenda1;
+    }
+
+    public static List<Agenda> getAgendaByNome(String nome){
+        DatabaseHelper databaseHelper = DatabaseHelper.getInstance();
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+
+        String where = AgendaContract.NAME + " LIKE '%" + nome + "%' ";
+        String[] params = {nome};
+        Cursor cursor = db.query(AgendaContract.TABLE, AgendaContract.COLUMNS, where, null, null, null, null);
+
+
+        List<Agenda> values = AgendaContract.getListAgenda(cursor);
+
+        return values;
+    }
+
+
 }

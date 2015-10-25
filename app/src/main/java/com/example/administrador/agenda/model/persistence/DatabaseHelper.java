@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.administrador.agenda.model.persistence.agenda.AgendaContract;
+import com.example.administrador.agenda.model.persistence.telefone.TelefoneContract;
 import com.example.administrador.agenda.util.ApplicationUtil;
 
 /**
@@ -26,6 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(AgendaContract.getCreateTableScript());
+        db.execSQL(TelefoneContract.getCreateTableScript());
     }
 
     @Override

@@ -2,12 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+
+    <item
+        android:id="@+id/menu_filter"
+        android:title="Adicionar"
+        app:showAsAction="always"
+        android:icon="@mipmap/ic_filter"
+        />
+
+
+
     <item
         android:id="@+id/menu_add"
         android:title="Adicionar"
         app:showAsAction="always"
         android:icon="@mipmap/ic_action__add"
         />
+
 
 
 </menu>

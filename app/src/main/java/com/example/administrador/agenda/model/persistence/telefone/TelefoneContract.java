@@ -14,7 +14,7 @@ import java.util.List;
  * Created by Administrador on 01/10/2015.
  */
 public class TelefoneContract {
-    public static final String TABLE = "rede";
+    public static final String TABLE = "telefone";
     public static final String ID = "id";
     public static final String AGENDA = "agenda_id";
     public static final String TELEFONE = "telefone";
@@ -42,7 +42,11 @@ public class TelefoneContract {
         ContentValues values = new ContentValues();
         values.put(TelefoneContract.ID, telefone.getId());
         values.put(TelefoneContract.TELEFONE, telefone.getName());
-        values.put(TelefoneContract.AGENDA, telefone.getAgenda().get_id());
+        if(telefone.getAgenda() == null){
+            values.put(TelefoneContract.AGENDA, "null");
+        }else {
+            values.put(TelefoneContract.AGENDA, telefone.getAgenda().get_id());
+        }
 
 
         return values;
